@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ticket-mcp
 
 MCP (Model Context Protocol) server for ticket recognition from conversations.
@@ -63,3 +64,7 @@ python -m ticket_mcp.server
 ## 许可证
 
 MIT
+=======
+# test123
+openclaw and crm test
+>>>>>>> c3a5bfedf398e206cb09444dafd60bbf649418e0
