@@ -1,0 +1,158 @@
+{
+  "timestamp": "2026-09-30T02:26:59.012257+00:00",
+  "scenario": "苏州青禾生物 / 周启明 冷链方案",
+  "extracted_ids": {
+    "customer_id": "CUS-1790735219010-0000",
+    "contact_id": "CON-1790735219011-0000",
+    "follow_up_id": "FUP-1790735219011-0000",
+    "todo_send_materials_id": "TODO-1790735219012-0000",
+    "todo_call_id": "TODO-1790735219012-0001"
+  },
+  "missing_fields": [
+    "budget",
+    "contact_mobile",
+    "delivery_email"
+  ],
+  "steps": [
+    {
+      "step": 1,
+      "name": "search_customer",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "tools/call",
+        "params": {
+          "name": "search_customer",
+          "arguments": {
+            "query": "苏州青禾生物"
+          }
+        }
+      },
+      "response_text": "未找到匹配 '苏州青禾生物' 的客户。"
+    },
+    {
+      "step": 2,
+      "name": "search_contact",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 2,
+        "method": "tools/call",
+        "params": {
+          "name": "search_contact",
+          "arguments": {
+            "query": "周启明"
+          }
+        }
+      },
+      "response_text": "未在 全局 找到匹配 '周启明' 的联系人。"
+    },
+    {
+      "step": 3,
+      "name": "create_customer",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "method": "tools/call",
+        "params": {
+          "name": "create_customer",
+          "arguments": {
+            "name": "苏州青禾生物",
+            "industry": "生物科技",
+            "notes": "准备新建一条冷链仓储线；关注温湿度实时监控 + 超限告警。正在比较三家供应商，预计下个月中旬决定。⚠️ 缺失：预算、手机号、收件邮箱",
+            "idempotency_key": "demo2-2026-09-30-suzhou-qinghe"
+          }
+        }
+      },
+      "response_text": "客户 CUS-1790735219010-0000\n  公司：苏州青禾生物\n  状态：lead\n  行业：生物科技\n  备注：准备新建一条冷链仓储线；关注温湿度实时监控 + 超限告警。正在比较三家供应商，预计下个月中旬决定。⚠️ 缺失：预算、手机号、收件邮箱",
+      "extracted_id": "CUS-1790735219010-0000"
+    },
+    {
+      "step": 4,
+      "name": "create_contact",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 4,
+        "method": "tools/call",
+        "params": {
+          "name": "create_contact",
+          "arguments": {
+            "customer_id": "CUS-1790735219010-0000",
+            "name": "周启明",
+            "role": "采购经理",
+            "is_primary": true,
+            "idempotency_key": "demo2-2026-09-30-zhou-qiming"
+          }
+        }
+      },
+      "response_text": "联系人 CON-1790735219011-0000\n  姓名：周启明\n  客户：CUS-1790735219010-0000\n  角色：采购经理\n  电话：(未填)\n  邮件：(未填)\n  主联系人：是",
+      "extracted_id": "CON-1790735219011-0000"
+    },
+    {
+      "step": 5,
+      "name": "create_follow_up",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 5,
+        "method": "tools/call",
+        "params": {
+          "name": "create_follow_up",
+          "arguments": {
+            "customer_id": "CUS-1790735219010-0000",
+            "contact_id": "CON-1790735219011-0000",
+            "content": "2026-09-29 下午电话沟通。\n- 苏州青禾生物准备新建一条冷链仓储线\n- 关注点：温湿度实时监控、超限告警\n- 状态：还在比较三家供应商，预计下个月中旬决定是否采购\n- 缺失：预算、手机号、具体收件邮箱（客户均未提供）",
+            "follow_up_at": "2026-10-06T09:00:00+00:00",
+            "idempotency_key": "demo2-2026-09-30-followup"
+          }
+        }
+      },
+      "response_text": "跟进 FUP-1790735219011-0000\n  客户：CUS-1790735219010-0000\n  联系人：CON-1790735219011-0000\n  状态：pending\n  下次跟进：2026-10-06T09:00:00+00:00\n  内容：2026-09-29 下午电话沟通。\n- 苏州青禾生物准备新建一条冷链仓储线\n- 关注点：温湿度实时监控、超限告警\n- 状态：还在比较三家供应商，预计下个月中旬决定是否采购\n- 缺失：预算、手机号、具体收件邮箱（客户均未提供）",
+      "extracted_id": "FUP-1790735219011-0000"
+    },
+    {
+      "step": 6,
+      "name": "create_todo_send_materials",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 6,
+        "method": "tools/call",
+        "params": {
+          "name": "create_todo",
+          "arguments": {
+            "title": "向周启明发送苏州青禾生物冷链方案 + 实施周期说明",
+            "description": "客户未给预算/手机号/邮箱——发送前需补充收件邮箱。",
+            "due_at": "2026-10-01T23:59:00+00:00",
+            "customer_id": "CUS-1790735219010-0000",
+            "contact_id": "CON-1790735219011-0000",
+            "follow_up_id": "FUP-1790735219011-0000",
+            "idempotency_key": "demo2-2026-09-30-todo-send-materials"
+          }
+        }
+      },
+      "response_text": "待办 TODO-1790735219012-0000\n  标题：向周启明发送苏州青禾生物冷链方案 + 实施周期说明\n  截止：2026-10-01T23:59:00+00:00\n  状态：open\n  关联：客户=CUS-1790735219010-0000 联系人=CON-1790735219011-0000 跟进=FUP-1790735219011-0000",
+      "extracted_id": "TODO-1790735219012-0000"
+    },
+    {
+      "step": 7,
+      "name": "create_todo_call_next_week",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 7,
+        "method": "tools/call",
+        "params": {
+          "name": "create_todo",
+          "arguments": {
+            "title": "联系周启明：约下周需求沟通",
+            "description": "需补齐：手机号、收件邮箱、预算口径",
+            "due_at": "2026-10-06T09:00:00+00:00",
+            "customer_id": "CUS-1790735219010-0000",
+            "contact_id": "CON-1790735219011-0000",
+            "follow_up_id": "FUP-1790735219011-0000",
+            "idempotency_key": "demo2-2026-09-30-todo-call"
+          }
+        }
+      },
+      "response_text": "待办 TODO-1790735219012-0001\n  标题：联系周启明：约下周需求沟通\n  截止：2026-10-06T09:00:00+00:00\n  状态：open\n  关联：客户=CUS-1790735219010-0000 联系人=CON-1790735219011-0000 跟进=FUP-1790735219011-0000",
+      "extracted_id": "TODO-1790735219012-0001"
+    }
+  ]
+}

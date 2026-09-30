@@ -1,0 +1,154 @@
+{
+  "timestamp": "2026-09-30T02:17:09.934450+00:00",
+  "scenario": "杭州云帆智能 / 陈可欣 三仓场景演示",
+  "extracted_ids": {
+    "customer_id": "CUS-1790734629933-0000",
+    "contact_id": "CON-1790734629933-0000",
+    "follow_up_id": "FUP-1790734629934-0000",
+    "todo_send_plan_id": "TODO-1790734629934-0000",
+    "todo_followup_mon_id": "TODO-1790734629934-0001"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "name": "search_customer",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "tools/call",
+        "params": {
+          "name": "search_customer",
+          "arguments": {
+            "query": "杭州云帆智能"
+          }
+        }
+      },
+      "response_text": "未找到匹配 '杭州云帆智能' 的客户。"
+    },
+    {
+      "step": 2,
+      "name": "search_contact",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 2,
+        "method": "tools/call",
+        "params": {
+          "name": "search_contact",
+          "arguments": {
+            "query": "陈可欣"
+          }
+        }
+      },
+      "response_text": "未在 全局 找到匹配 '陈可欣' 的联系人。"
+    },
+    {
+      "step": 3,
+      "name": "create_customer",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "method": "tools/call",
+        "params": {
+          "name": "create_customer",
+          "arguments": {
+            "name": "杭州云帆智能",
+            "industry": "智能科技",
+            "notes": "第四季度计划升级仓库流程；关注多仓库存同步、异常预警；预算未定",
+            "idempotency_key": "demo-2026-09-30-hz-yunfan"
+          }
+        }
+      },
+      "response_text": "客户 CUS-1790734629933-0000\n  公司：杭州云帆智能\n  状态：lead\n  行业：智能科技\n  备注：第四季度计划升级仓库流程；关注多仓库存同步、异常预警；预算未定",
+      "extracted_id": "CUS-1790734629933-0000"
+    },
+    {
+      "step": 4,
+      "name": "create_contact",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 4,
+        "method": "tools/call",
+        "params": {
+          "name": "create_contact",
+          "arguments": {
+            "customer_id": "CUS-1790734629933-0000",
+            "name": "陈可欣",
+            "phone": "13800004567",
+            "role": "运营总监",
+            "is_primary": true,
+            "idempotency_key": "demo-2026-09-30-chen-kexin"
+          }
+        }
+      },
+      "response_text": "联系人 CON-1790734629933-0000\n  姓名：陈可欣\n  客户：CUS-1790734629933-0000\n  角色：运营总监\n  电话：13800004567\n  邮件：(未填)\n  主联系人：是",
+      "extracted_id": "CON-1790734629933-0000"
+    },
+    {
+      "step": 5,
+      "name": "create_follow_up",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 5,
+        "method": "tools/call",
+        "params": {
+          "name": "create_follow_up",
+          "arguments": {
+            "customer_id": "CUS-1790734629933-0000",
+            "contact_id": "CON-1790734629933-0000",
+            "content": "和杭州云帆智能运营总监陈可欣聊仓储管理系统。\n- 第四季度计划升级仓库流程\n- 关注点：多仓库存同步、异常预警\n- 需求：针对三仓场景的方案\n- 预算：未定\n- 承诺：本周三前发方案，下周一再联系确认是否安排演示",
+            "follow_up_at": "2026-10-05T09:00:00+00:00",
+            "idempotency_key": "demo-2026-09-30-followup"
+          }
+        }
+      },
+      "response_text": "跟进 FUP-1790734629934-0000\n  客户：CUS-1790734629933-0000\n  联系人：CON-1790734629933-0000\n  状态：pending\n  下次跟进：2026-10-05T09:00:00+00:00\n  内容：和杭州云帆智能运营总监陈可欣聊仓储管理系统。\n- 第四季度计划升级仓库流程\n- 关注点：多仓库存同步、异常预警\n- 需求：针对三仓场景的方案\n- 预算：未定\n- 承诺：本周三前发方案，下周一再联系确认是否安排演示",
+      "extracted_id": "FUP-1790734629934-0000"
+    },
+    {
+      "step": 6,
+      "name": "create_todo_send_plan",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 6,
+        "method": "tools/call",
+        "params": {
+          "name": "create_todo",
+          "arguments": {
+            "title": "向陈可欣发送杭州云帆智能三仓场景方案",
+            "description": "针对多仓库存同步 + 异常预警。预算未定时先给框架版。",
+            "due_at": "2026-09-30T23:59:00+00:00",
+            "customer_id": "CUS-1790734629933-0000",
+            "contact_id": "CON-1790734629933-0000",
+            "follow_up_id": "FUP-1790734629934-0000",
+            "idempotency_key": "demo-2026-09-30-todo-send-plan"
+          }
+        }
+      },
+      "response_text": "待办 TODO-1790734629934-0000\n  标题：向陈可欣发送杭州云帆智能三仓场景方案\n  截止：2026-09-30T23:59:00+00:00\n  状态：open\n  关联：客户=CUS-1790734629933-0000 联系人=CON-1790734629933-0000 跟进=FUP-1790734629934-0000",
+      "extracted_id": "TODO-1790734629934-0000"
+    },
+    {
+      "step": 7,
+      "name": "create_todo_followup_mon",
+      "request": {
+        "jsonrpc": "2.0",
+        "id": 7,
+        "method": "tools/call",
+        "params": {
+          "name": "create_todo",
+          "arguments": {
+            "title": "联系陈可欣：是否安排仓储管理方案演示",
+            "description": "下周一电话或微信联系。需确认演示时间。",
+            "due_at": "2026-10-05T09:00:00+00:00",
+            "customer_id": "CUS-1790734629933-0000",
+            "contact_id": "CON-1790734629933-0000",
+            "follow_up_id": "FUP-1790734629934-0000",
+            "idempotency_key": "demo-2026-09-30-todo-followup-mon"
+          }
+        }
+      },
+      "response_text": "待办 TODO-1790734629934-0001\n  标题：联系陈可欣：是否安排仓储管理方案演示\n  截止：2026-10-05T09:00:00+00:00\n  状态：open\n  关联：客户=CUS-1790734629933-0000 联系人=CON-1790734629933-0000 跟进=FUP-1790734629934-0000",
+      "extracted_id": "TODO-1790734629934-0001"
+    }
+  ]
+}
