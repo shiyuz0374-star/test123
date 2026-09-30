@@ -1,0 +1,66 @@
+{
+  "skill": "crm-auto-capture",
+  "version": "0.1.0",
+  "purpose": "演示 crm-auto-capture skill 的输入输出形态",
+  "examples": [
+    {
+      "id": "example-1-baojian",
+      "user_input": "今天拜访了杭州蓝芯科技，见到 CTO 王海，电话 13900000000。他们关心多仓库存同步和异常预警。答应下周四前发方案。",
+      "extracted": {
+        "customer_name": "杭州蓝芯科技",
+        "contact_name": "王海",
+        "contact_role": "CTO",
+        "contact_phone": "13900000000",
+        "need": "多仓库存同步和异常预警",
+        "next_action": "发方案",
+        "next_action_due": "<下周四 23:59:00+08:00>",
+        "talked_at": "<today>"
+      },
+      "mcp_calls": [
+        {"step": 1, "tool": "MCP.ticketMcp.searchCustomer", "args": {"query": "杭州蓝芯科技"}, "expected": "未找到"},
+        {"step": 2, "tool": "MCP.ticketMcp.searchContact", "args": {"query": "王海"}, "expected": "未找到"},
+        {"step": 3, "tool": "MCP.ticketMcp.createCustomer", "args": {"name": "杭州蓝芯科技", "industry": "科技"}, "returns": "CUS-..."},
+        {"step": 4, "tool": "MCP.ticketMcp.createContact", "args": {"customer_id": "<from step 3>", "name": "王海", "phone": "13900000000", "role": "CTO"}, "returns": "CON-..."},
+        {"step": 5, "tool": "MCP.ticketMcp.createFollowUp", "args": {"customer_id": "<from step 3>", "contact_id": "<from step 4>", "content": "<完整纪要>", "follow_up_at": "<下周四 23:59:00+08:00>"}, "returns": "FUP-..."},
+        {"step": 6, "tool": "MCP.ticketMcp.createTodo", "args": {"title": "发方案给王海（杭州蓝芯科技）", "due_at": "<下周四 23:59:00+08:00>", "customer_id": "<from step 3>", "contact_id": "<from step 4>"}, "returns": "TODO-..."}
+      ],
+      "report": "客户 CUS-... / 联系人 CON-... / 跟进 FUP-... / 待办 TODO-..."
+    },
+    {
+      "id": "example-2-buwang-phone",
+      "user_input": "下周二和深圳速达物流的张总监约了仓库方案演示，他们正在比较 ERP 模块，预算还没定。",
+      "extracted": {
+        "customer_name": "深圳速达物流",
+        "contact_name": "张总监",
+        "contact_role": "总监",
+        "contact_phone": null,
+        "need": "仓库方案演示 + ERP 模块比较",
+        "next_action": "仓库方案演示",
+        "next_action_due": "<下周二 10:00:00+08:00>",
+        "talked_at": "<today>"
+      },
+      "mcp_calls": [
+        "search_customer / search_contact → 找到或不找到",
+        "create_customer / create_contact → ⚠️ contact.phone 未提供 → notes 里标注",
+        "create_follow_up / create_todo"
+      ],
+      "report": "客户 CUS-... / 联系人 CON-... ⚠️ phone 未提供 / 跟进 FUP-... / 待办 TODO-...
+缺失字段：phone, budget"
+    },
+    {
+      "id": "example-3-already-exists",
+      "user_input": "和杭州蓝芯科技的王海约了明天上午电话确认细节。",
+      "extracted": {
+        "customer_name": "杭州蓝芯科技",
+        "contact_name": "王海",
+        "need": "明天上午电话确认细节"
+      },
+      "mcp_calls": [
+        "search_customer('杭州蓝芯科技') → 找到（example 1 已建）",
+        "search_contact('王海') → 找到",
+        "create_follow_up → 仅新建跟进 + 待办"
+      ],
+      "report": "复用 CUS-... / 复用 CON-... / 新建跟进 FUP-... / 新建待办 TODO-..."
+    }
+  ]
+}
